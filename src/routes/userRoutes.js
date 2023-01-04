@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email, Password } = req.body;
+    const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
 
     // console.log(req.body);
     try {
@@ -38,7 +38,13 @@ router.post('/register', async (req, res) => {
             _id: new mongoose.Types.ObjectId(),
             UserName,
             Email,
-            Password
+            Password,
+            CurrentCompany,
+            CurrentPosition,
+            PastCompany,
+            Education,
+            Batch,
+            Course
         });
 
         // Save user to db
@@ -56,7 +62,13 @@ router.post('/register', async (req, res) => {
             user: {
                 id: newUser._id,
                 name: newUser.UserName,
-                email: newUser.Email
+                email: newUser.Email,
+                currentCompany: newUser.CurrentCompany,
+                currentPosition: newUser.CurrentPosition,
+                pastCompany: newUser.PastCompany,
+                education:newUser.Education,
+                batch:newUser.Batch,
+                course:newUser.Course
             }
         });
     } catch (err) {
