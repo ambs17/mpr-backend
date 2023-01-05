@@ -120,6 +120,21 @@ router.post('/login', async (req, res) => {
     }
 })
 
+// Get all user data
+router.get('/user', async (req, res) => {
+    try {
+        // Get user from db
+        const userData = await user.find({}).select('-password');
+        
+        // Send user data to client
+        res.json(userData);
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
+    }
+})
+
 // Get user data
 router.get('/user?:id', async (req, res) => {
     try {
