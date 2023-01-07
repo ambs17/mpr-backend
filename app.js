@@ -2,6 +2,7 @@
 // Import cors for cross origin resource sharing
 const express = require('express');
 const cors = require('cors');
+const { forgotPassword } = require("./src/controllers/userController");
 
 // Create express server with express function
 const server = express();
@@ -15,6 +16,8 @@ const userRoutes = require('./src/routes/userRoutes');
 
 // assign main route to the endpoints
 server.use('/user', userRoutes);
+
+server.post("/forget-password", forgotPassword);
 
 // Establish Connection to db
 require("./src/db/conn");

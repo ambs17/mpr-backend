@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 })
 
 // Register user
-router.post('/register', async (req, res) => {
+const registerUser = async (req, res) => {
     const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
 
     // console.log(req.body);
@@ -77,10 +77,10 @@ router.post('/register', async (req, res) => {
             message: err.message
         });
     }
-})
+}
 
 // Login user
-router.post('/login', async (req, res) => {
+const userLogin = async (req, res) => {
     const { email, password } = req.body;
     try {
         // Check if user exists
@@ -118,10 +118,10 @@ router.post('/login', async (req, res) => {
             message: err.message
         });
     }
-})
+}
 
 // Get all user data
-router.get('/user', async (req, res) => {
+const getAllUserData = async (req, res) => {
     try {
         // Get user from db
         const userData = await user.find({}).select('-password');
@@ -133,10 +133,10 @@ router.get('/user', async (req, res) => {
             message: err.message
         });
     }
-})
+}
 
 // Get user data
-router.get('/user?:id', async (req, res) => {
+const getUserData = async (req, res) => {
     try {
         // Get user from db
         const userData = await user.findById(req.user.id
@@ -149,10 +149,10 @@ router.get('/user?:id', async (req, res) => {
             message: err.message
         });
     }
-})
+}
 
 // Edit user data
-router.put('/user', async (req, res) => {
+const editUserData = async (req, res) => {
     const { name, email } = req.body;
     try {
         // Check if user exists
@@ -178,9 +178,70 @@ router.put('/user', async (req, res) => {
             message: err.message
         });
     }
-})
+}
 
+const forgotPassword = async (req, res) => {
+    try {
+        const existingUser = await userModel.findOne({ email: req.body.email });
+        if(existingUser) {
+            const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+            oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-// Export router
-module.exports = router;
+            // const secret = SECRET_KEY + existingUser.password;
+            // const payload = {
+            //     email: existingUser.email,
+            //     id: existingUser.id
+            // }
+            // const token = jwt.sign(payload, secret, { expiresIn: '15m' });
+            // for production
+            // const link = `http://fms-backend-production-ce11.up.railway.app/forgot-password/${existingUser.id}/${token}`;
+            // for development
+            // const link = `http://localhost:${process.env.PORT}/forgot-password/${existingUser.id}/${token}`;
+            // console.log(link);
+
+            const temperoryPassword = randomstring.generate(7);
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(temperoryPassword, saltRounds);
+            const userPassword = await userModel.findByIdAndUpdate({ _id: existingUser.id }, { password: hashedPassword }, { new: true });
+
+            const sendMail = async () => {
+                try {
+                    const accessToken = await oAuth2Client.getAccessToken();
+
+                    const transport = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            type: 'OAuth2',
+                            user: 'tanishcqmehta.dev@gmail.com',
+                            clientId: process.env.CLIENT_ID,
+                            clientSecret: process.env.CLIENT_SECRET,
+                            refreshToken: process.env.REFRESH_TOKEN,
+                            accessToken
+                        }
+                    })
+
+                    const mailOptions = {
+                        from: '#name of your company# <tumhari mail jisse bhej rhe ho.com>',
+                        to: existingUser.email,
+                        subject: `Reset Password for FMS account : ${existingUser.email} `,
+                        text: `Your new password is provided below.. Please copy it somewhere to be able to login. You can also reset your password from the app once logged in.\n New Password: ${temperoryPassword}`,
+                        html: `<h3 style="color:#330080;">Your new password is provided below.. Please copy it somewhere to be able to login. You can also reset your password from the app once logged in.</h3> <h4><span>New Password: </span> <span style="color:#ff0066;">${temperoryPassword}</span></h4>`
+                    }
+
+                    const result = await transport.sendMail(mailOptions);
+                    return res.status(200).json({ message: "Please check your email for new password.", result });
+                } catch(err) {
+                    return res.status(400).json({ message: `Something went wrong! ${err}` });
+                }
+            };
+            sendMail();
+        } else {
+            res.status(200).json({ message: "User doesn't exists!" });
+        }
+    } catch (err) {
+        res.status(400).json({ message: `Something went wrong! ${err}` });
+    }
+};
+
+module.exports = { registerUser, userLogin, getAllUserData, getUserData, editUserData, forgotPassword };
 
