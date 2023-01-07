@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         unique: [true, "Username already exists"],
         trim: true,
         minlength: [3, "Username must be at least 3 characters long"],
-        maxlength: [20, "Username must be less than 20 characters long"]
+        maxlength: [50, "Username must be less than 50 characters long"]
     },
     Email: {
         type: String,
@@ -16,67 +16,72 @@ const userSchema = new mongoose.Schema({
         unique: [true, "Email already exists"],
         // trim: true,
         // lowercase: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid');
-            }
-        }
+        // validate(value) {
+        //     if (!validator.isEmail(value)) {
+        //         throw new Error('Email is invalid');
+        //     }
+        // }
     },
     Password: {
         type: String,
         //required: true,
         trim: true,
         minlength: [8, "Password must be at least 8 characters long"],
-        maxlength: [20, "Password must be less than 20 characters long"]
+        maxlength: [50, "Password must be less than 50 characters long"]
     },
     CurrentCompany: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Company name must be at least 3 characters long"],
-        maxlength: [20, "Company name must be less than 20 characters long"]
+        
+        maxlength: [50, "Company name must be less than 50 characters long"]
     },
     CurrentPosition: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Position name must be at least 3 characters long"],
-        maxlength: [20, "Position name must be less than 20 characters long"]
+        
+        maxlength: [50, "Position name must be less than 50 characters long"]
     },
     PastCompany: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Company name must be at least 3 characters long"],
-        maxlength: [20, "Company name must be less than 20 characters long"]
+        
+        maxlength: [50, "Company name must be less than 50 characters long"]
     },
     Education: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Education name must be at least 3 characters long"],
-        maxlength: [20, "Education name must be less than 20 characters long"]
+        
+        maxlength: [50, "Education name must be less than 50 characters long"]
     },
     Batch: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Batch name must be at least 3 characters long"],
-        maxlength: [20, "Batch name must be less than 20 characters long"]
+        maxlength: [50, "Batch name must be less than 50 characters long"]
     },
     Course: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Course name must be at least 3 characters long"],
-        maxlength: [20, "Course name must be less than 20 characters long"]
+        maxlength: [50, "Course name must be less than 50 characters long"]
     },
     Description: {
         type: String,
         //required: true,
+        trim: true
+        // maxlength: [256, "Description must be less than 256 characters long"]
+    },
+    LinkedinUrl: {
+        type: String,
+        //required: true,
         trim: true,
-        maxlength: [256, "Description must be less than 256 characters long"]
+        //maxlength: [256, "Description must be less than 256 characters long"]
     }
+
     });
 
     // map the schema to the db table

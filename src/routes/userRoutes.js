@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
+    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course,Description,LinkedinUrl } = req.body;
 
     // console.log(req.body);
     try {
@@ -38,13 +38,14 @@ router.post('/register', async (req, res) => {
             _id: new mongoose.Types.ObjectId(),
             UserName,
             Email,
-            Password,
             CurrentCompany,
             CurrentPosition,
             PastCompany,
             Education,
             Batch,
-            Course
+            Course,
+            Description,
+            LinkedinUrl
         });
 
         // Save user to db
@@ -68,7 +69,9 @@ router.post('/register', async (req, res) => {
                 pastCompany: newUser.PastCompany,
                 education:newUser.Education,
                 batch:newUser.Batch,
-                course:newUser.Course
+                course:newUser.Course,
+                description:newUser.Description,
+                linkedinUrl:newUser.LinkedinUrl
             }
         });
     } catch (err) {
@@ -81,10 +84,10 @@ router.post('/register', async (req, res) => {
 
 // Login user
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { Email } = req.body;
     try {
         // Check if user exists
-        const userExists = await user({ email });
+        const userExists = await user.findOne({ Email });
         if (!userExists) {
             return res.status(400).json({
                 message: 'User does not exist'
@@ -92,25 +95,25 @@ router.post('/login', async (req, res) => {
         }
 
         // Check if password is correct
-        const isMatch = await bcrypt.compare(password, userExists.password);
-        if (!isMatch) {
-            return res.status(400).json({
-                message: 'Invalid credentials'
-            });
-        }
+        // const isMatch = await bcrypt.compare(password, userExists.password);
+        // if (!isMatch) {
+        //     return res.status(400).json({
+        //         message: 'Invalid credentials'
+        //     });
+        // }
 
         // Generate token
-        const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: userExists._id }, `${process.env.JWT_SECRET_KEY}`, {
             expiresIn: 3600
         });
-
+        console.log(userExists);
         // Send token to client
         res.status(200).json({
             token,
             user: {
                 id: userExists._id,
-                name: userExists.name,
-                email: userExists.email
+                name: userExists.UserName,
+                email: userExists.Email
             }
         });
     } catch (err) {
@@ -136,12 +139,12 @@ router.get('/user', async (req, res) => {
 })
 
 // Get user data
-router.get('/user?:id', async (req, res) => {
+router.get('/usr/:id', async (req, res) => {
     try {
         // Get user from db
-        const userData = await user.findById(req.user.id
-        ).select('-password');
-        
+        const userData = await user.findById(req.params.id
+        );
+        // .select('-password')
         // Send user data to client
         res.json(userData);
     } catch (err) {
