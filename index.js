@@ -1,6 +1,6 @@
 //console.log(`Server is running on port`);
 // import app frthe app.js file
-const server = require('./app');
+const server = require('./socket');
 
 // import dotenv for environment variables
 const dotenv = require('dotenv');

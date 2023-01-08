@@ -10,7 +10,6 @@ const server = express();
 // Use cors and express.json() for parsing json data
 server.use(cors());
 server.use(express.json());
-
 // Import routes
 const userRoutes = require('./src/routes/userRoutes');
 
