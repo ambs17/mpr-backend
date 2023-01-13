@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 // Import user model
+const faculty = require('../models/faculty');
 const user = require('../models/user');
 
 // Import bcrypt for password hashing
@@ -9,15 +10,15 @@ const bcrypt = require('bcrypt');
 
 // Import jwt for token generation
 const jwt = require('jsonwebtoken');
-const { response } = require('../../app');
+//const { response } = require('../../app');
 
 router.get('/', (req, res) => {
-    res.send('Healthy User');
+    res.send('Healthy Faculty');
 })
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
+    const { UserName, Email, Password,Department,Qualification,Position,ImageLink} = req.body;
 
     // console.log(req.body);
     try {
@@ -26,11 +27,11 @@ router.post('/register', async (req, res) => {
             message: 'insufficient data!'
         })
         // Check if user exists
-        const userExists = await user.findOne({ Email });
-        console.log(userExists);
-        if (userExists) {
+        const facultyExists = await faculty.findOne({ Email });
+        console.log(facultyExists);
+        if (facultyExists) {
             return res.status(400).json({
-                message: 'User already exists'
+                message: 'Faculty already exists!'
             });
         }
 
@@ -39,21 +40,19 @@ router.post('/register', async (req, res) => {
         // const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user
-        const newUser = new user({
+        const newFaculty = new faculty({
             _id: new mongoose.Types.ObjectId(),
             UserName,
             Email,
             Password,
-            CurrentCompany,
-            CurrentPosition,
-            PastCompany,
-            Education,
-            Batch,
-            Course
+            Department,
+            Qualification,
+            Position,
+            ImageLink
         });
 
         // Save user to db
-        await newUser.save();
+        await newFaculty.save();
         
 
         // Generate token
@@ -64,16 +63,13 @@ router.post('/register', async (req, res) => {
         // Send token to client
         res.status(200).json({
             // token,
-            user: {
-                id: newUser._id,
-                name: newUser.UserName,
-                email: newUser.Email,
-                currentCompany: newUser.CurrentCompany,
-                currentPosition: newUser.CurrentPosition,
-                pastCompany: newUser.PastCompany,
-                education:newUser.Education,
-                batch:newUser.Batch,
-                course:newUser.Course
+            faculty: {
+                id: newFaculty._id,
+                name: newFaculty.UserName,
+                email: newFaculty.Email,
+                department: newFaculty.Department,
+                qualification: newFaculty.Qualification,
+                position: newFaculty.Position,
             }
         });
     } catch (err) {

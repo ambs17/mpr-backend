@@ -12,9 +12,12 @@ server.use(cors());
 server.use(express.json());
 // Import routes
 const userRoutes = require('./src/routes/userRoutes');
+const facultyRoutes = require('./src/routes/facultyRoutes');
 
 // assign main route to the endpoints
+server.use('/faculty', facultyRoutes);
 server.use('/user', userRoutes);
+
 
 server.post("/forget-password", forgotPassword);
 
