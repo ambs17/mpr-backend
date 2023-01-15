@@ -1,6 +1,6 @@
 //console.log(`Server is running on port`);
 // import app frthe app.js file
-const server = require('./socket');
+const server = require('./app');
 
 // import dotenv for environment variables
 const dotenv = require('dotenv');
@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Set port to environment variable or 3000
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Start server
 server.listen(port, () => {
