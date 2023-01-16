@@ -17,11 +17,11 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
+    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
 
     // console.log(req.body);
     try {
-        if(!UserName||!Email||!Password)
+        if(!UserName||!Email)
         return res.status(400).json({
             message: 'insufficient data!'
         })
@@ -43,7 +43,6 @@ router.post('/register', async (req, res) => {
             _id: new mongoose.Types.ObjectId(),
             UserName,
             Email,
-            Password,
             CurrentCompany,
             CurrentPosition,
             PastCompany,
@@ -123,7 +122,6 @@ router.post('/login', async (req, res) => {
             res.status(500).json({
                 message: err.message
 
-   
         });
     }
 })
@@ -144,12 +142,12 @@ router.get('/user', async (req, res) => {
 })
 
 // Get user data
-router.get('/user?:id', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
     try {
         // Get user from db
-        const userData = await user.findById(req.user.id
-        ).select('-password');
-        
+        const userData = await user.findById(req.params.id
+        );
+        // .select('-password')
         // Send user data to client
         res.json(userData);
     } catch (err) {
