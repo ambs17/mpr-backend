@@ -105,13 +105,13 @@ router.post('/login', async (req, res) => {
             // }
     
             // Generate token
-            // const token = jwt.sign({ id: userExists._id }, `${process.env.JWT_SECRET_KEY}`, {
-            //     expiresIn: 3600
-            // });
+            const token = jwt.sign({ id: userExists._id }, `${process.env.JWT_SECRET_KEY}`, {
+                expiresIn: 3600
+            });
             console.log(userExists);
             // Send token to client
             res.status(200).json({
-                // token,
+                token,
                 user: {
                     id: userExists._id,
                     name: userExists.UserName,
