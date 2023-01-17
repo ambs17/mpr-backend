@@ -88,14 +88,14 @@ router.post('/login', async (req, res) => {
     const { email } = req.body;
     try {
         // Check if user exists
-        const userExists = await user({ email });
+        const userExists = await user.findOne({ Email :email});
         if (!userExists) {
             return res.status(400).json({
                 message: 'User does not exist'
             });
         }
 
-        // // Check if password is correct
+        // Check if password is correct
         // const isMatch = await bcrypt.compare(password, userExists.password);
         // if (!isMatch) {
         //     return res.status(400).json({
@@ -103,18 +103,18 @@ router.post('/login', async (req, res) => {
         //     });
         // }
 
-        // // Generate token
-        // const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET, {
-        //     expiresIn: 3600
-        // });
-
+        // Generate token
+        const token = jwt.sign({ id: userExists._id },`${process.env.JWT_SECRET_KEY}`, {
+            expiresIn: 3600
+        });
+        console.log(userExists);
         // Send token to client
         res.status(200).json({
-            // token,
+            token,
             user: {
                 id: userExists._id,
-                name: userExists.name,
-                email: userExists.email
+                name: userExists.UserName,
+                email: userExists.Email
             }
         });
     } catch (err) {
@@ -139,12 +139,12 @@ router.get('/user', async (req, res) => {
 })
 
 // Get user data
-router.get('/user?:id', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
     try {
         // Get user from db
-        const userData = await user.findById(req.user.id
-        ).select('-password');
-        
+        const userData = await user.findById(req.params.id
+        );
+        // .select('-password')
         // Send user data to client
         res.json(userData);
     } catch (err) {
