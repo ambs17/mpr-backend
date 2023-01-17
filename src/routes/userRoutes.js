@@ -17,11 +17,11 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email, Password,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
+    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
 
     // console.log(req.body);
     try {
-        if(!UserName||!Email||!Password)
+        if(!UserName||!Email)
         return res.status(400).json({
             message: 'insufficient data!'
         })
@@ -43,7 +43,6 @@ router.post('/register', async (req, res) => {
             _id: new mongoose.Types.ObjectId(),
             UserName,
             Email,
-            Password,
             CurrentCompany,
             CurrentPosition,
             PastCompany,
@@ -86,7 +85,7 @@ router.post('/register', async (req, res) => {
 
 // Login user
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email } = req.body;
     try {
         // Check if user exists
         const userExists = await user({ email });
@@ -96,22 +95,22 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // Check if password is correct
-        const isMatch = await bcrypt.compare(password, userExists.password);
-        if (!isMatch) {
-            return res.status(400).json({
-                message: 'Invalid credentials'
-            });
-        }
+        // // Check if password is correct
+        // const isMatch = await bcrypt.compare(password, userExists.password);
+        // if (!isMatch) {
+        //     return res.status(400).json({
+        //         message: 'Invalid credentials'
+        //     });
+        // }
 
-        // Generate token
-        const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET, {
-            expiresIn: 3600
-        });
+        // // Generate token
+        // const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET, {
+        //     expiresIn: 3600
+        // });
 
         // Send token to client
         res.status(200).json({
-            token,
+            // token,
             user: {
                 id: userExists._id,
                 name: userExists.name,
@@ -130,7 +129,6 @@ router.get('/user', async (req, res) => {
     try {
         // Get user from db
         const userData = await user.find({}).select('-password');
-        
         // Send user data to client
         res.json(userData);
     } catch (err) {
