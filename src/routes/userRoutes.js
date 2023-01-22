@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course } = req.body;
+    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course,Description,LinkdinID,ImageLink } = req.body;
 
     // console.log(req.body);
     try {
@@ -48,7 +48,10 @@ router.post('/register', async (req, res) => {
             PastCompany,
             Education,
             Batch,
-            Course
+            Course,
+            Description,
+            LinkdinID,
+            ImageLink
         });
 
         // Save user to db
@@ -72,7 +75,10 @@ router.post('/register', async (req, res) => {
                 pastCompany: newUser.PastCompany,
                 education:newUser.Education,
                 batch:newUser.Batch,
-                course:newUser.Course
+                course:newUser.Course,
+                description: newUser.Description,
+                linkedinId:newUser.LinkdinID,
+                imageLink:newUser.ImageLink
             }
         });
     } catch (err) {
