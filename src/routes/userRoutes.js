@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course,Description,LinkdinID,ImageLink } = req.body;
+    const { UserName, Email,CurrentCompany,CurrentPosition,PastCompany,Education,Batch,Course,Description,LinkedinID,ImageLink } = req.body;
 
     // console.log(req.body);
     try {
@@ -50,7 +50,7 @@ router.post('/register', async (req, res) => {
             Batch,
             Course,
             Description,
-            LinkdinID,
+            LinkedinID,
             ImageLink
         });
 
@@ -77,7 +77,7 @@ router.post('/register', async (req, res) => {
                 batch:newUser.Batch,
                 course:newUser.Course,
                 description: newUser.Description,
-                linkedinId:newUser.LinkdinID,
+                linkedinId:newUser.LinkedinID,
                 imageLink:newUser.ImageLink
             }
         });
@@ -162,7 +162,7 @@ router.get('/user/:id', async (req, res) => {
 
 // Edit user data
 router.put('/user', async (req, res) => {
-    const { name, email } = req.body;
+    const { name, email,linkedinId } = req.body;
     try {
         // Check if user exists
         const userExists = await user.findById(req.user.id
