@@ -179,7 +179,7 @@ router.get('/alluser/:id', async (req, res) => {
 })
 // Edit user data
 router.put('/user', async (req, res) => {
-    const { name, email,linkedinId } = req.body;
+    const {name,email} = req.body;
     try {
         // Check if user exists
         const userExists = await user.findById(req.user.id
@@ -193,6 +193,7 @@ router.put('/user', async (req, res) => {
         // Update user data
         userExists.name = name;
         userExists.email = email;
+        //userExists.linkedinId= linkedinId;
 
         // Save user to db
         await userExists.save();
