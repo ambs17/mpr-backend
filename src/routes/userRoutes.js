@@ -130,7 +130,8 @@ router.post('/login', async (req, res) => {
 router.get('/user', async (req, res) => {
     try {
         // Get user from db
-        const userData = await user.find({}).select('-password');
+        const userData = await user.find({})
+        // .select('-password');
         
         // Send user data to client
         res.json(userData);
@@ -156,7 +157,22 @@ router.get('/user/:id', async (req, res) => {
         });
     }
 })
-
+// Get alluser data leaving a particular id
+router.get('/alluser/:id', async (req, res) => {
+    try {
+        const users = await user.find({ _id: { $ne: req.params.id } }).select([
+          "Email",
+          "UserName",
+          "ImageLink",
+          "_id",
+        ]);
+        return res.json(users);
+      } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
+    }
+})
 // Edit user data
 router.put('/user', async (req, res) => {
     const { name, email } = req.body;
