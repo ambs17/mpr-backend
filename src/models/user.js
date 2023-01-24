@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: [true, "Username already exists"],
         trim: true,
-        minlength: [3, "Username must be at least 3 characters long"],
-        maxlength: [20, "Username must be less than 20 characters long"]
+        // minlength: [3, "Username must be at least 3 characters long"],
+        // maxlength: [20, "Username must be less than 20 characters long"]
     },
     Email: {
         type: String,
@@ -22,54 +22,53 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-   
     CurrentCompany: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Company name must be at least 3 characters long"],
-        maxlength: [20, "Company name must be less than 20 characters long"]
+        // minlength: [3, "Company name must be at least 3 characters long"],
+        // maxlength: [20, "Company name must be less than 20 characters long"]
     },
     CurrentPosition: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Position name must be at least 3 characters long"],
-        maxlength: [20, "Position name must be less than 20 characters long"]
+    //     minlength: [3, "Position name must be at least 3 characters long"],
+    //     maxlength: [20, "Position name must be less than 20 characters long"]
     },
     PastCompany: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Company name must be at least 3 characters long"],
-        maxlength: [20, "Company name must be less than 20 characters long"]
+        // minlength: [3, "Company name must be at least 3 characters long"],
+        // maxlength: [20, "Company name must be less than 20 characters long"]
     },
     Education: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Education name must be at least 3 characters long"],
-        maxlength: [20, "Education name must be less than 20 characters long"]
+        // minlength: [3, "Education name must be at least 3 characters long"],
+        // maxlength: [20, "Education name must be less than 20 characters long"]
     },
     Batch: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Batch name must be at least 3 characters long"],
-        maxlength: [20, "Batch name must be less than 20 characters long"]
+        // minlength: [3, "Batch name must be at least 3 characters long"],
+        // maxlength: [20, "Batch name must be less than 20 characters long"]
     },
     Course: {
         type: String,
         //required: true,
         trim: true,
-        minlength: [3, "Course name must be at least 3 characters long"],
-        maxlength: [20, "Course name must be less than 20 characters long"]
+        // minlength: [3, "Course name must be at least 3 characters long"],
+        // maxlength: [20, "Course name must be less than 20 characters long"]
     },
     Description: {
         type: String,
         //required: true,
         trim: true,
-        maxlength: [256, "Description must be less than 256 characters long"]
+        // maxlength: [256, "Description must be less than 256 characters long"]
     },
     LinkdinID: {
         type: String,
