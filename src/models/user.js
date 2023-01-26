@@ -70,7 +70,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         // maxlength: [256, "Description must be less than 256 characters long"]
     },
-    LinkdinID: {
+    LinkedinID: {
         type: String,
         //required: true,
         trim: true,
