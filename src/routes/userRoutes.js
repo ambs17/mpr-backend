@@ -135,8 +135,8 @@ router.get('/user', async (req, res) => {
     try {
         // Get user from db
 
-        const userData = await user.find({}).select('-password');
-
+        const userData = await user.find({});
+        // .select('-password')
         // Send user data to client
         res.json(userData);
     } catch (err) {
