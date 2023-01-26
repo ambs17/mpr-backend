@@ -13,14 +13,12 @@ server.use(express.json());
 // Import routes
 const userRoutes = require('./src/routes/userRoutes');
 const facultyRoutes = require('./src/routes/facultyRoutes');
-const messageRoutes = require('./src/routes/messagesRoutes');
-
+const mssgRoutes=require('./src/routes/MessageRoutes');
 
 // assign main route to the endpoints
-server.use('/messages',messageRoutes);
 server.use('/faculty', facultyRoutes);
 server.use('/user', userRoutes);
-
+server.use('/mssg', mssgRoutes);
 
 server.post("/forget-password", forgotPassword);
 
