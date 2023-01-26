@@ -179,11 +179,10 @@ router.get('/alluser/:id', async (req, res) => {
 })
 // Edit user data
 router.put('/user', async (req, res) => {
-    const {name,email} = req.body;
+    const {UserName,Email, id, LinkedinID} = req.body;
     try {
         // Check if user exists
-        const userExists = await user.findById(req.user.id
-        );
+        const userExists = await user.findById(id);
         if (!userExists) {
             return res.status(400).json({
                 message: 'User does not exist'
@@ -191,9 +190,9 @@ router.put('/user', async (req, res) => {
         }
 
         // Update user data
-        userExists.name = name;
-        userExists.email = email;
-        //userExists.linkedinId= linkedinId;
+        userExists.UserName = UserName;
+        userExists.Email = Email;
+        userExists.LinkedinID = LinkedinID;
 
         // Save user to db
         await userExists.save();
